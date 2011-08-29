@@ -1,4 +1,5 @@
 #include "element.h"
+#include "embedded/controls/embeddedControls.h"
 
 #include <QtGui>
 
@@ -63,6 +64,12 @@ void Element::setAssistApi(qReal::models::GraphicalModelAssistApi *graphicalAssi
 	mLogicalAssistApi = logicalAssistApi;
 }
 
+void Element::initEmbeddedControls() {
+	if (SettingsManager::value("EmbeddedControls", false).toBool() && !EmbeddedControls::existsInstance(this)) {
+		EmbeddedControls::createInstance(this, mLogicalAssistApi->editorManager());
+	}
+}
+
 void Element::initTitlesBy(QRectF const& contents)
 {
 	foreach (ElementTitle * const title, mTitles) {
@@ -75,12 +82,17 @@ void Element::initTitles()
 	initTitlesBy(boundingRect().adjusted(kvadratik, kvadratik, -kvadratik, -kvadratik));
 }
 
-void Element::singleSelectionState(const bool singleSelected)
-{
+void Element::singleSelectionState(const bool singleSelected) {
+	if (singleSelected) {
+		selectionState(true);
+	}
 	emit switchFolding(!singleSelected);
 }
-void Element::selectionState(const bool selected)
-{
-	Q_UNUSED(selected)
-	//it will be usefull in the future
+void Element::selectionState(const bool selected) {
+	if (isSelected() != selected) {
+		setSelected(selected);
+	}
+	if (!selected) {
+		singleSelectionState(false);
+	}
 }
