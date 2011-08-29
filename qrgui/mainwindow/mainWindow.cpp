@@ -631,8 +631,9 @@ void MainWindow::deleteFromDiagram()
 			deleteFromExplorer(isLogicalModel);
 		}
 	}
-	if (getCurrentTab() != NULL && getCurrentTab()->scene() != NULL)
+	if (getCurrentTab() != NULL && getCurrentTab()->scene() != NULL) {
 		getCurrentTab()->scene()->invalidate();
+	}
 }
 
 void MainWindow::showAbout()

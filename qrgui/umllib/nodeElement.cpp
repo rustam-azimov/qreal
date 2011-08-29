@@ -565,7 +565,7 @@ bool NodeElement::initPossibleEdges()
 
 void NodeElement::initEmbeddedLinkers()
 {
-	if (mEmbeddedLinkers.isEmpty()) {
+	if (!mEmbeddedLinkers.isEmpty()) {
 		return;
 	}
 	QSet<qReal::Id> usedEdges;
@@ -581,7 +581,7 @@ void NodeElement::initEmbeddedLinkers()
 		embeddedLinker->setMaster(this);
 		usedEdges.insert(type.second);
 	}
-	setVisibleEmbeddedLinkers(true);
+	setVisibleEmbeddedLinkers(false);
 	foreach(EmbeddedLinker* embeddedLinker, mEmbeddedLinkers) {
 		embeddedLinker->initTitle();
 	}
@@ -1272,7 +1272,7 @@ void NodeElement::checkConnectionsToPort()
 
 void NodeElement::singleSelectionState(const bool singleSelected) {
 	initEmbeddedLinkers();
-	setVisibleEmbeddedLinkers(true);
+	setVisibleEmbeddedLinkers(singleSelected);
 	Element::singleSelectionState(singleSelected);
 }
 void NodeElement::selectionState(const bool selected) {
